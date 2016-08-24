@@ -139,10 +139,7 @@ public:
 
     using Item = MapItem<InIter, UnaryOp>;
 
-    Option<Item> next() {
-        if (Option<typename InIter::Item> it = i.next()) return f(*it);
-        else return None;
-    }
+    Option<Item> next() { return i.next().map(f); }
 };
 
 template <typename InIter, typename BinaryOp, typename State>
@@ -159,10 +156,7 @@ public:
 
     using Item = ScanItem<InIter, BinaryOp, State>;
 
-    Option<Item> next() {
-        if (Option<Item> it = i.next()) return f(s, *it);
-        else return None;
-    }
+    Option<Item> next() { return i.next().map([s](auto& a) { return f(s, a); }); }
 };
 
 template <typename InIter, typename UnaryPredicate>
